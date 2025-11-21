@@ -140,3 +140,88 @@ ESP32, Evil Twin, WiFi Hacking, Deauthentication, Captive Portal, HTML, CSS, Jav
 ```
 
 ---
+
+
+
+
+# Alassane Camara : Notes for CSN150
+
+This project demonstrates how I used an ESP32-CAM to create an Evil Twin Wi-Fi access point that clones an existing Wi-Fi network, displays a fake router firmware update page, and captures password attempts. The ESP32-CAM broadcasts a cloned SSID, forces a captive portal, and logs incorrect passwords through the Serial Monitor.
+
+## Equipment Used
+
+* ESP32-CAM (AI Thinker)
+* USB-to-ESP32-CAM adapter board (USB-C)
+* Laptop running Arduino IDE
+* Smartphone (for testing the Evil Twin and captive portal)
+
+## Tools Used
+
+* Arduino IDE 2.3.6
+* ESP32 board package
+* Web browser (Safari / Chrome)
+* Serial Monitor
+* GitHub (forked repository)
+* ChatGPT (for guidance)
+
+## Steps I Followed
+
+1. Forked the provided Evil Twin repository to my GitHub.
+2. Downloaded the ZIP, extracted it, and opened `NetworkDeAuth.ino` in Arduino IDE.
+3. Set **Board → ESP32 Arduino → AI Thinker ESP32-CAM**.
+4. Connected the ESP32-CAM using a USB-C adapter board.
+5. Selected the correct COM port and uploaded the code.
+6. After upload, the ESP32-CAM created its default AP: **WiPhi_34732**.
+7. Connected my phone to **WiPhi_34732** using password **d347h320**.
+8. Opened `http://192.168.4.1` to access the control panel.
+9. Scanned nearby Wi-Fi networks and selected **ALICHE02** to clone.
+10. Pressed **Start EvilTwin**, which replaced the default AP with the cloned SSID.
+11. Connected my phone to the cloned **ALICHE02** network.
+12. The ESP32-CAM forced a **captive portal** showing a fake firmware update failure page.
+13. Entered a test password to trigger the “Wrong Password” message.
+14. Viewed the Serial Monitor showing password attempts and connection logs.
+
+## Problems / Solutions
+
+### Problem 1 — ESP32-CAM showed "BAD" repeatedly in Serial Monitor
+
+* The ESP32-CAM does not support full monitor mode or packet injection.
+* **Solution:** Ignore deauthing features. Only use the Evil Twin AP + captive portal.
+
+### Problem 2 — Only one SSID appeared even after cloning
+
+* Phones collapse multiple SSIDs with the *same name* into one entry.
+* **Solution:** After starting the Evil Twin, forget the real network and reconnect.
+
+### Problem 3 — Captive portal did not appear automatically
+
+* Phones sometimes connect without triggering a redirect.
+* **Solution:** Manually visited `192.168.4.1` to load the fake login page.
+
+## Final Report
+
+In this project, I successfully created an Evil Twin Wi-Fi network using an ESP32-CAM. After flashing the program, the ESP32-CAM broadcasted a cloned SSID and redirected connected devices to a captive portal that mimicked a router firmware recovery page. This portal collected password attempts and displayed responses such as “Wrong Password.” The Serial Monitor logged attempts as expected. Although deauthentication did not work on the ESP32-CAM, the Evil Twin and credential capture features worked correctly, fulfilling the core requirements of the assignment.
+
+## Screenshots
+
+### 1. Scanned Networks + Selected Target SSID
+
+![evil_Twin_ssids](https://github.com/user-attachments/assets/afd70256-37b0-4e43-b26c-d11ab97d91c5)
+
+
+
+### 2. Fake Router Firmware Update Page
+
+![Evil_twinAPRM](https://github.com/user-attachments/assets/80999336-6e49-4050-9df7-a39d00a29a26)
+
+
+### 3. Wrong Password Submission Page
+
+![evil_twin_wrngpass_wrd](https://github.com/user-attachments/assets/a7d15473-305c-45be-a172-e41f2ace63e1)
+
+
+### 4. Serial Monitor Logs Showing Attempt
+
+<img width="1920" height="1020" alt="eviltwin pic" src="https://github.com/user-attachments/assets/9b028c8b-98f0-406b-8e69-dafebfe2bc43" />
+
+
